@@ -1,8 +1,9 @@
 pragma solidity ^0.4.21;
 
+import "./ScoreInterface.sol";
 import "./ScoreStore.sol";
 
-contract ScoreV2 {
+contract ScoreV2 is ScoreInterface, Ownable {
     ScoreStore store;
 
     constructor(address _storeAddress) public {
@@ -19,5 +20,9 @@ contract ScoreV2 {
 
     function score() public view returns (uint) {
         return store.get(msg.sender);
+    }
+
+    function recliamStoreOwnership() public onlyOwner {
+        store.transferOwnership(owner);
     }
 }

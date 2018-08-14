@@ -1,25 +1,15 @@
 pragma solidity ^0.4.21;
 
 import "./ScoreInterface.sol";
-import "./ScoreStore.sol";
 
-contract ScoreV1 is ScoreInterface, Ownable {
-    ScoreStore store;
-
-    function setStoreContract(address _storeAddress) public {
-        require(_storeAddress != address(0));
-        store = ScoreStore(_storeAddress);
-    }
+contract ScoreV1 is ScoreInterface {
+    mapping (address => uint) scoreMap;
 
     function hit() public {
-        store.put(msg.sender, store.get(msg.sender) + 10);
+        scoreMap[msg.sender] = scoreMap[msg.sender] + 10;
     }
 
     function score() public view returns (uint) {
-        return store.get(msg.sender);
-    }
-
-    function recliamStoreOwnership() public onlyOwner {
-        store.transferOwnership(owner);
+        return scoreMap[msg.sender];
     }
 }

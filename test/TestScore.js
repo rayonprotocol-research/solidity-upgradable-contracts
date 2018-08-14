@@ -1,4 +1,3 @@
-const ScoreStore = artifacts.require('./ScoreStore.sol');
 const ScoreV1 = artifacts.require('./ScoreV1.sol');
 const ScoreV2 = artifacts.require('./ScoreV2.sol');
 const ScoreInterface = artifacts.require("ScoreInterface.sol");
@@ -13,21 +12,12 @@ var proxy;
 var scoreInterface;
 contract('Score Test', function (accounts) {
     before(async function () {
-        // Store contract deploy
-        scoreStoreContract = await ScoreStore.new({ from: accounts[0] });
-
         // Score contract(ScoreV1) deploy
         scoreContract = await ScoreV1.new({ from: accounts[0] });
 
         // Proxy setting
         proxy = await Proxy.new(scoreContract.address, { from: accounts[0] });
         scoreInterface = await ScoreInterface.at(proxy.address, { from: accounts[0] });
-
-        // connect proxy and store contract
-        scoreInterface.setStoreContract(scoreStoreContract.address, { from: accounts[0] });
-
-        // change ownership of scoreStore
-        scoreStoreContract.transferOwnership(scoreInterface.address, { from: accounts[0] });
     })
 
     describe('Hit and get test', function () {
@@ -56,7 +46,7 @@ contract('Score Test', function (accounts) {
     describe('Change score contract to ScoreV2', function () {
         it("deploy ScoreV2 contract", async function () {
             // deploy ScoreV2
-            scoreContract = await ScoreV2.new(scoreStoreContract.address, { from: accounts[0] });
+            scoreContract = await ScoreV2.new({ from: accounts[0] });
 
             // change target contract of Score in proxy
             proxy.setTargetAddress(scoreContract.address, { from: accounts[0] });

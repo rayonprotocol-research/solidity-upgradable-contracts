@@ -4,11 +4,8 @@ import "./ScoreInterface.sol";
 import "./ScoreStore.sol";
 
 contract ScoreV1 is ScoreInterface, Ownable {
-    ScoreStore internal store;
+    ScoreStore store;
 
-    constructor(address _storeAddress) public {
-        setStoreContract(_storeAddress);
-    }
     function setStoreContract(address _storeAddress) public {
         require(_storeAddress != address(0));
         store = ScoreStore(_storeAddress);

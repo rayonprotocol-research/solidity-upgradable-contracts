@@ -49,7 +49,7 @@ contract('Score Test', function (accounts) {
             scoreContract = await ScoreV2.new({ from: accounts[0] });
 
             // change target contract of Score in proxy
-            proxy.setTargetAddress(scoreContract.address, { from: accounts[0] });
+            await proxy.setTargetAddress(scoreContract.address, { from: accounts[0] });
         })
         it("test for accounts1", async function () {
             const account = accounts[1];
